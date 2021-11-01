@@ -1,4 +1,4 @@
-# [Creating a Bind Shell with password in Python]()
+# [Bind Shell with password in Python]()
 You don't need to install anything.
 - Run the victim.py (victim machine), simply write:
     ```
