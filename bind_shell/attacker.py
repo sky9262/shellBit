@@ -1,4 +1,5 @@
 import socket, os, time
+from cryptography.fernet import Fernet
 
 SERVER_HOST = input("Enter host: ")
 SERVER_PORT = int(input("Enter port: "))
@@ -42,5 +43,17 @@ if(s.recv(BUFFER_SIZE).decode()) == "auth":
             if output.split(SEPARATOR)[1] == "exiting...":
                 print("exiting...")
                 break
-            print(output.split(SEPARATOR)[1])
+            elif output.split(SEPARATOR)[1] == "key":
+                if os.path.exists("key.fernet"):
+                    key = open("key.fernet", "rb").read()
+                    print(f"Using saved key: {key}")
+                else:
+                    key = Fernet.generate_key()
+                    with open("key.fernet", "wb") as key_file:
+                        key_file.write(key)
+                    print(f"Your new key: {key}")
+                s.send(key)  
+                print(s.recv(BUFFER_SIZE).decode().split(SEPARATOR)[1])
+            else:
+                print(output.split(SEPARATOR)[1])
 s.close()
